@@ -40,8 +40,9 @@ def main():
         shuffle=True,
         drop_last=True)
 
+    lin = torch.nn.Linear(DATA_DIM, NUM_CLASS)
     model = torch.nn.Sequential(
-        torch.nn.Linear(DATA_DIM, NUM_CLASS),
+        lin,
         torch.nn.Softmax(dim = -1))
     print(model)
 
@@ -62,12 +63,9 @@ def main():
             pred = model(x)
             cnt_correct += sum(pred.argmax(1) == y)
         print(f"accuracy {cnt_correct/len(test_data_loader.dataset)}")
-        
 
 
 
-    
-    
 
 
 
