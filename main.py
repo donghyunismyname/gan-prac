@@ -34,20 +34,25 @@ def main():
         train=False,
         transform=torchvision.transforms.ToTensor(),
         download=True)
+    print(real_data[0][0].shape)
     real_data = [(x.view(-1), torch.tensor(1, dtype=torch.float32)) for x,_ in real_data]
+    print(real_data[0][0].shape)
+    exit()
 
     bce_loss = torch.nn.BCELoss()
     discriminator = torch.nn.Sequential(
         torch.nn.Linear(DATA_DIM, HIDDEN_DIM),
-        torch.nn.Sigmoid(),
+        torch.nn.ReLU(),
         torch.nn.Linear(HIDDEN_DIM, HIDDEN_DIM),
-        torch.nn.Sigmoid(),
+        torch.nn.ReLU(),
         torch.nn.Linear(HIDDEN_DIM, 1),
         torch.nn.Sigmoid()
     )
     generator = torch.nn.Sequential(
         torch.nn.Linear(SEED_DIM, HIDDEN_DIM),
-        torch.nn.Sigmoid(),
+        torch.nn.ReLU(),
+        torch.nn.Linear(HIDDEN_DIM, HIDDEN_DIM),
+        torch.nn.ReLU(),
         torch.nn.Linear(HIDDEN_DIM, DATA_DIM),
         torch.nn.Sigmoid()
     )
