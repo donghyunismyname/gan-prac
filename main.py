@@ -11,11 +11,11 @@ DATA_W = 28
 DATA_H = 28
 DATA_DIM = DATA_W * DATA_H
 SEED_DIM = 2
-HIDDEN_DIM = 10
+HIDDEN_DIM = 80
 
 EPOCH = 20
 EPOCH_DIS = 1
-EPOCH_GEN = 50
+EPOCH_GEN = 200
 
 
 
@@ -34,10 +34,7 @@ def main():
         train=False,
         transform=torchvision.transforms.ToTensor(),
         download=True)
-    print(real_data[0][0].shape)
     real_data = [(x.view(-1), torch.tensor(1, dtype=torch.float32)) for x,_ in real_data]
-    print(real_data[0][0].shape)
-    exit()
 
     bce_loss = torch.nn.BCELoss()
     discriminator = torch.nn.Sequential(
@@ -57,8 +54,8 @@ def main():
         torch.nn.Sigmoid()
     )
 
-    opt_discriminator = torch.optim.Adam(discriminator.parameters(), lr=1e-3)
-    opt_generator = torch.optim.Adam(generator.parameters(), lr=1e-3)
+    opt_discriminator = torch.optim.Adam(discriminator.parameters(), lr=1e-3, weight_decay=1e-4)
+    opt_generator = torch.optim.Adam(generator.parameters(), lr=1e-3, weight_decay=1e-4)
 
     for epoch in tqdm(range(EPOCH)):
         # Discriminator training
